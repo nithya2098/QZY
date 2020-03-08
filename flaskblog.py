@@ -78,7 +78,6 @@ def register():
         d["password"] = password
         with open('data.json', 'a')as fp:
             jsonobj=json.dumps(d)
-            
         '''
         conn = psycopg2.connect(database=ci.dbname, user=ci.dbuser, password=ci.dbpassword, host=ci.dbhost, port=ci.dbport)
         cur = conn.cursor()
@@ -108,10 +107,6 @@ def login():
     else:
             flash('Login Unsuccessful. please check username and password','danger')
     return render_template('login.html', title='Login', form=form)
-
-
-
-
 
 
 
