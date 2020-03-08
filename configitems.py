@@ -1,5 +1,5 @@
 dbname="testdb"
 dbuser="postgres"
 dbpassword="postgress"
-dbhost="168.62.58.251"
+dbhost="localhost"
 dbport="5433"
