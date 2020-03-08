@@ -3,6 +3,7 @@ import psycopg2
 from flask import Flask, render_template, url_for,flash , redirect,json,jsonify,request,make_response
 from flask_sqlalchemy import SQLAlchemy
 from forms import RegistrationForm, LoginForm
+import configitems as ci
 
 app = Flask(__name__)
 
@@ -69,16 +70,25 @@ def register():
     password = form.password.data
     confirm_password =form.confirm_password.data
     if form.validate_on_submit():
-        d = {}
+        #d = {}
+        '''
+        d=[]
         d["username"] = username
         d["email"] = email
         d["password"] = password
         with open('data.json', 'a')as fp:
             jsonobj=json.dumps(d)
-        conn = psycopg2.connect(database='testdb', user='postgres', password='postgress', host='13.82.227.59', port='5435')
+            
+        '''
+        conn = psycopg2.connect(database=ci.dbname, user=ci.dbuser, password=ci.dbpassword, host=ci.dbhost, port=ci.dbport)
         cur = conn.cursor()
-        cur.execute("INSERT INTO registerUser VALUES (%s)", (json.dumps(d),))
-        flash('Account created for {form.username.data}!', 'success')
+        insertqry=""" INSERT INTO users (username, email, password) VALUES (%s,%s,%s)"""
+        valuestoInsert=(username,email,password)
+        cur.execute(insertqry, valuestoInsert)
+        conn.commit()
+        count = cur.rowcount
+        if count>0:
+            flash('Account created for {form.username.data}!', 'success')
 
         return redirect(url_for('home'))
     return render_template('register.html', form=form)
