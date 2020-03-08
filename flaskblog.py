@@ -1,7 +1,7 @@
 from datetime import datetime
 import psycopg2
 from flask import Flask, render_template, url_for,flash , redirect,json,jsonify,request,make_response
-from flask_sqlalchemy import SQLAlchemy
+#from flask_sqlalchemy import SQLAlchemy
 from forms import RegistrationForm, LoginForm
 import configitems as ci
 
