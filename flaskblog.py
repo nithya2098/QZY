@@ -78,7 +78,7 @@ def register():
         conn = psycopg2.connect(database='testdb', user='postgres', password='postgress', host='13.82.227.59', port='5435')
         cur = conn.cursor()
         cur.execute("INSERT INTO registerUser VALUES (%s)", (json.dumps(d),))
-        flash(f'Account created for {form.username.data}!', 'success')
+        flash('Account created for {form.username.data}!', 'success')
 
         return redirect(url_for('home'))
     return render_template('register.html', form=form)
@@ -106,4 +106,4 @@ def login():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5001, debug=True)
