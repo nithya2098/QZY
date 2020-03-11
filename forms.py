@@ -11,10 +11,19 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField('Sign Up')
 
 
-
-
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
+
+
+class QuizSubmitForm(FlaskForm):
+    question = StringField('question', validators=[DataRequired()])
+    AOption = StringField('AOption', validators=[DataRequired()])
+    BOption = StringField('BOption', validators=[DataRequired()])
+    COption = StringField('COption', validators=[DataRequired()])
+    DOption = StringField('DOption', validators=[DataRequired()])
+    Answer = StringField('Answer', validators=[DataRequired()])
+    category = StringField('dropdownMenuButton', validators=[DataRequired()])
+    submit = SubmitField('Add Question')

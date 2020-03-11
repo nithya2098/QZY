@@ -2,7 +2,7 @@ from datetime import datetime
 import psycopg2
 from flask import Flask, render_template, url_for,flash , redirect,json,jsonify,request,make_response
 #from flask_sqlalchemy import SQLAlchemy
-from forms import RegistrationForm, LoginForm
+from forms import RegistrationForm, LoginForm, QuizSubmitForm
 import configitems as ci
 
 app = Flask(__name__)
@@ -81,9 +81,9 @@ def register():
         '''
         conn = psycopg2.connect(database=ci.dbname, user=ci.dbuser, password=ci.dbpassword, host=ci.dbhost, port=ci.dbport)
         cur = conn.cursor()
-        insertqry=""" INSERT INTO users (username, email, password) VALUES (%s,%s,%s)"""
-        valuestoInsert=(username,email,password)
-        cur.execute(insertqry, valuestoInsert)
+        Userinsertqry=""" INSERT INTO user_login (username, email, password) VALUES (%s,%s,%s)"""
+        UservaluestoInsert=(username,email,password)
+        cur.execute(Userinsertqry, UservaluestoInsert)
         conn.commit()
         count = cur.rowcount
         if count>0:
@@ -109,6 +109,33 @@ def login():
     return render_template('login.html', title='Login', form=form)
 
 
+@app.route("/submitform", methods=['GET','POST'])
+def submitform():
+    if request.method=='POST':
+        form=QuizSubmitForm()
+        question=form.question.data
+        AOption=form.AOption.data
+        BOption=form.BOption.data
+        COption=form.COption.data
+        DOption=form.DOption.data
+        answer=form.Answer.data
+        category=form.category.data
+        conn = psycopg2.connect(database=ci.dbname, user=ci.dbuser, password=ci.dbpassword, host=ci.dbhost, port=ci.dbport)
+        cur = conn.cursor()
+        qid="1"
+        hint="test"
+        Question_insertqry = """ INSERT INTO question (question,choice4) VALUES (%s, %s)"""
+        Question_valuestoInsert=(question,DOption)
+        #Question_insertqry=""" INSERT INTO question (quest_id, question_description, choice1, choice2, choice3, choice4, correct_answer, category_id) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)"""
+        #Question_valuestoInsert=(qid,question,AOption,BOption,COption,DOption,answer,category)
+        cur.execute(Question_insertqry, Question_valuestoInsert)
+        conn.commit()
+        count = cur.rowcount
+        if count>0:
+            flash('Question added', 'success')
+        return redirect(url_for('submitform'))
+
+    return render_template('submitform.html', title='submitQuiz')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001, debug=True)
